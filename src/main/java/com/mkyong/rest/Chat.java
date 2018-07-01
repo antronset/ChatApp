@@ -13,14 +13,14 @@ import java.util.concurrent.Executors;
 @Path("/chat")
 public class Chat {
 
-    final static Map<String, AsyncResponse> waiters = new ConcurrentHashMap<>();
-    final static ExecutorService ex = Executors.newSingleThreadExecutor();
+    private final static Map<String, AsyncResponse> waiters = new ConcurrentHashMap<>();
+    private final static ExecutorService ex = Executors.newSingleThreadExecutor();
 
     @Path("/{nick}")
     @GET
     @Produces("text/plain")
     public void hangUp(@Suspended AsyncResponse asyncResp, @PathParam("nick") String nick) {
-
+        System.out.println(nick);
         waiters.put(nick, asyncResp);
     }
 
@@ -29,6 +29,8 @@ public class Chat {
     @Produces("text/plain")
     @Consumes("text/plain")
     public String sendMessage(final @PathParam("nick") String nick, final String message) {
+
+        System.out.println(message);
 
         ex.submit(new Runnable() {
             @Override
